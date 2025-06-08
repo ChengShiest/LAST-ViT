@@ -2,11 +2,11 @@
 ![tea](./imgs/tea.png)
 
 
-|   Scenario   |  Training Script   |     Last-ViT Weight | DownStream Task|
-| :----------------: | :----------------: |  :------:  | :----------------: |
-| Self-supervised | https://github.com/facebookresearch/dino |     [DINO](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/dino0080.pth)  | Object Descovery |
-| Text-supervised | https://github.com/mlfoundations/open_clip |     [CLIP](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/openai_b_16.pt)  | [OV Seg](https://github.com/wangf3014/SCLIP) |
-| Label-supervised | https://github.com/ChengShiest/LAST-ViT/tree/main/cls_pretrain |     [ViT](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/ViT_190k.pth)  | TODO |
+|   Scenario   |  Training Script   |     Last-ViT Weight 
+| :----------------: | :----------------: |  :------:  
+| Self-supervised | https://github.com/facebookresearch/dino |     [DINO](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/dino0080.pth)  
+| Text-supervised | https://github.com/mlfoundations/open_clip |     [CLIP](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/openai_b_16.pt)  
+| Label-supervised | https://github.com/ChengShiest/LAST-ViT/tree/main/cls_pretrain |     [ViT](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/ViT_190k.pth)  
 |||
 
 Before
