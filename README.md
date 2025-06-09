@@ -6,7 +6,7 @@
 | :----------------: | :----------------: |  :------:  
 | Self-supervised | https://github.com/facebookresearch/dino |     [DINO](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/dino0080.pth)  
 | Text-supervised | https://github.com/mlfoundations/open_clip |     [CLIP](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/openai_b_16.pt)  
-| Label-supervised | https://github.com/ChengShiest/LAST-ViT/tree/main/cls_pretrain |     [ViT](https://github.com/ChengShiest/LAST-ViT/releases/download/weights/ViT_190k.pth)  
+| Label-supervised | https://github.com/ChengShiest/LAST-ViT/tree/main/cls_pretrain |     [ViT](https://github.com/ChengShiest/LAST-ViT/releases/download/weights2/ViT_190k.pth)  
 |||
 
 Before
