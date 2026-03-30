@@ -52,51 +52,22 @@ def build_data_loader(dataset, batch_size, num_workers, training=True):
     )
 
 
-def generate_unique_random_tensor(rows, cols, min_val, max_val):
-    result = torch.zeros((rows, cols), dtype=torch.int64)
-    
-    for i in range(rows):
-        result[i] = torch.tensor(torch.randperm(max_val + 1)[:cols])
-    
-    return result
-
 class ClassificationNet(nn.Module):
-    def __init__(self, model: nn.Module, topk=7):
+    def __init__(self, model: nn.Module):
         super().__init__()
         self.model = model
-        self.topk = topk
+
     @property
     def device(self):
         return list(self.model.parameters())[0].device
 
     def forward(self, inputs):
         image, label = inputs
-        bs = image.shape[0]
-        
-        pred_, dense_out = self.model(image.to(self.device))
-        # pred = pred.max(-1)[1]
-        # print(pred)
-        if self.topk != 0:
-            result = torch.gather(dense_out, 2, label.to(self.device).unsqueeze(1).unsqueeze(1).expand(-1, dense_out.size(1), 1)).squeeze(-1)
-            top_values, top_indices = torch.topk(result, k=self.topk, dim=1, largest=True)
-            # top_indices = generate_unique_random_tensor(bs, self.topk, 0, 195).to(image.device)
-            result = torch.ones_like(result)
-            result.scatter_(1, top_indices, 0)
-            H = dense_out.shape[1]
-            mask = result.reshape(bs, int(H**0.5), int(H**0.5))
-            mask = F.interpolate(mask.unsqueeze(1), size=(224, 224), mode='nearest')
-            pred, dense_out = self.model(image.to(self.device) * mask)
-            if self.training:
-                label = label.to(self.device)
-                return F.cross_entropy(pred, label)
-            else:
-                return pred
+        pred, _ = self.model(image.to(self.device))
+        if self.training:
+            return F.cross_entropy(pred, label.to(self.device))
         else:
-            if self.training:
-                label = label.to(self.device)
-                return F.cross_entropy(pred, label)
-            else:
-                return pred_
+            return pred
         
 class ClassificationAcc(DatasetEvaluator):
     def reset(self):
@@ -202,8 +173,8 @@ class dense_vit(VisionTransformer):
         diff =  x_detach / torch.abs(x - x_detach) 
         _, indices = torch.topk(diff, k=1, dim=1, largest=True)
         sel_p = torch.gather(x_detach, 1, indices)
-        cls_token = torch.mean(x, dim=1)
-        return cls_token, None
+        cls_token = torch.mean(sel_p, dim=1)
+        return cls_token, x_detach
 
 
 # VIT-B-16
