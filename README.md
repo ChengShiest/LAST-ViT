@@ -94,8 +94,9 @@ python visualization/evaluate_patch_hit.py \
 
 ## News
 
-- **[2026-03]** Initial release: code, pre-trained weights (DINO / CLIP / ViT-B16), and patch-bbox evaluation. Sanity check coming soon.
 
+- **[2026-03]** Initial release: code, pre-trained weights (DINO / CLIP / ViT-B16), and patch-bbox evaluation. Sanity check coming soon.
+- **[2026-04]** Thank for kylin0421 to help provide the visualization code.
 ## Citation
 
 ```bibtex
