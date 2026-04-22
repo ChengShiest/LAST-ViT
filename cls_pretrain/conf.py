@@ -99,9 +99,26 @@ from fvcore.transforms.transform import Transform
 from detectron2.data.transforms import Augmentation, ResizeTransform
 
 
+class ImageNetValFolder(torch.utils.data.Dataset):
+    def __init__(self, root, transform=None):
+        self.root = root
+        self.transform = transform
+        from torchvision.datasets import ImageFolder
+        self._folder = ImageFolder(root, transform=None)
+
+    def __len__(self):
+        return len(self._folder)
+
+    def __getitem__(self, idx):
+        path, label = self._folder.samples[idx]
+        image = Image.open(path).convert('RGB')
+        if self.transform:
+            image = self.transform(image)
+        return image, label
+
 dataloader = OmegaConf.create()
 dataloader.train = L(build_data_loader)(
-    dataset=L(torchvision.datasets.ImageNet)(
+    dataset=L(ImageNetValFolder)(
         root="/path/to/imagenet",
         split="train",
         transform=L(T.Compose)(
@@ -120,9 +137,8 @@ dataloader.train = L(build_data_loader)(
 
 
 dataloader.test = L(build_data_loader)(
-    dataset=L(torchvision.datasets.ImageNet)(
-        root="${...train.dataset.root}",
-        split="val",
+    dataset=L(ImageNetValFolder)(
+        root="/data/dataset/imagenet/val",
         transform=L(T.Compose)(
             transforms=[
                 L(T.Resize)(size=256),
@@ -174,7 +190,8 @@ class dense_vit(VisionTransformer):
         _, indices = torch.topk(diff, k=1, dim=1, largest=True)
         sel_p = torch.gather(x_detach, 1, indices)
         cls_token = torch.mean(sel_p, dim=1)
-        return cls_token, x_detach
+        logits = self.heads(cls_token)
+        return logits, x_detach
 
 
 # VIT-B-16
@@ -213,3 +230,5 @@ train = get_config("common/train.py").train
 train.max_iter = 100 * 1281167 // 512 // 8
 train.output_dir = "output"
 train.checkpointer['period'] = 3000
+
+
